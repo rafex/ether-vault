@@ -1,0 +1,43 @@
+services:
+  ether-vault:
+    build:
+      context: ..
+      dockerfile: containers/Dockerfile
+    ports:
+      - "127.0.0.1:8080:8080"
+    environment:
+      AUTH_BOOTSTRAP_USERNAME: ${AUTH_BOOTSTRAP_USERNAME:?set AUTH_BOOTSTRAP_USERNAME}
+      AUTH_BOOTSTRAP_PASSWORD: ${AUTH_BOOTSTRAP_PASSWORD:?set AUTH_BOOTSTRAP_PASSWORD}
+      AUTH_BOOTSTRAP_SCOPES: ${AUTH_BOOTSTRAP_SCOPES:-auth:admin vault:read vault:write}
+      AUTH_TOKEN_TTL_SECONDS: ${AUTH_TOKEN_TTL_SECONDS:-3600}
+      PORT: 8080
+      DATABASE_PATH: /var/lib/ether-vault/ether-vault.sqlite
+      VAULT_ROOT: /var/lib/ether-vault/vaults
+      GPG_HOME: /var/lib/ether-vault/gnupg
+    volumes:
+      - ether-vault-data:/var/lib/ether-vault
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-fsS", "http://127.0.0.1:8080/health"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+
+  caddy:
+    image: caddy:2.10-alpine
+    depends_on:
+      ether-vault:
+        condition: service_healthy
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile:ro
+      - caddy-data:/data
+      - caddy-config:/config
+    restart: unless-stopped
+
+volumes:
+  ether-vault-data:
+  caddy-data:
+  caddy-config:

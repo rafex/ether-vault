@@ -1,0 +1,18 @@
+# Maven output
+target/
+
+# Local runtime state
+data/
+*.sqlite
+*.sqlite3
+*.db
+*.log
+
+# Credentials and local overrides
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+*.asc
+*.gpg

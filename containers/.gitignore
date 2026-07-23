@@ -1,0 +1,13 @@
+# Never commit deployment credentials or persistent container state.
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+*.asc
+*.gpg
+*.secret
+*.secrets
+data/
+caddy-data/
+caddy-config/
