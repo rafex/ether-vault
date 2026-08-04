@@ -1,0 +1,3 @@
+ether.rafex.io {
+    reverse_proxy ether-vault:8080
+}

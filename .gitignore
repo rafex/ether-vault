@@ -1,0 +1,30 @@
+.DS_Store
+.flattened-pom.xml
+
+# Local configuration and credentials
+.env
+.env.*
+!.env.example
+*.local
+*.secret
+*.secrets
+*.pem
+*.key
+*.asc
+*.gpg
+
+# Local data and generated output
+data/
+**/data/
+*.sqlite
+*.sqlite3
+*.db
+*.log
+target/
+**/target/
+
+# IDE and tooling
+.idea/
+.vscode/
+*.iml
+.java-version
